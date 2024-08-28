@@ -1,39 +1,21 @@
-# .
+# E-Commence With Vue
 
-This template should help get you started developing with Vue 3 in Vite.
+- Username: misafir@site.com
+- Password: 123456
 
-## Recommended IDE Setup
+## About the Project
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+This project developed with Vue.js is a simple e-commerce site that has a login process in the basic structure, adding products to the basket, increasing or decreasing the amount of products in the basket and deleting the product in the basket.
 
-## Type Support for `.vue` Imports in TS
+## Live Demo
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+[E-Commence With Vue](https://e-commerce-with-vue-2wor.vercel.app/)
 
-## Customize configuration
+## Technologies Used
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+- Vue
+- TypeScript
+- Supabase
+- Ant Design
+- Axios
+- Pinia

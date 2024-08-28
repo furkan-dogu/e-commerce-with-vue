@@ -5,16 +5,18 @@
       collapsed-width="0"
     >
       <div class="logo">
-        Katalog
+        <router-link to="/">Katalog</router-link>
       </div>
       <a-menu theme="dark" mode="inline">
-        <a-menu-item>
+        <template v-if="authStore.isAuth">
+          <a-menu-item :key="category.id" v-for="category in categories">
+            <user-outlined />
+            <router-link :to="'/category/' + category.id" class="nav-text">{{ category.title }}</router-link>
+          </a-menu-item>
+        </template>
+        <a-menu-item v-else>
           <user-outlined />
           <router-link to="/">Ana Sayfa</router-link>
-        </a-menu-item>
-        <a-menu-item :key="category.id" v-for="category in categories">
-          <user-outlined />
-          <router-link :to="'/category/' + category.id" class="nav-text">{{ category.title }}</router-link>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -69,10 +71,13 @@ const handleLogout = async () => {
   background: rgba(255, 255, 255, 0.2);
   margin: 16px;
   font-size: 24px;
-  color: white;
   padding: 5px;
   border-radius: 5px;
   text-align: center;
+}
+
+.logo a {
+  color: white;
 }
 
 .site-layout-sub-header-background {
