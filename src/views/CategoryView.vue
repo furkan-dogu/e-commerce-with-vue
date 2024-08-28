@@ -8,43 +8,37 @@
 
     <a-skeleton active v-if="loading" />
     <div v-else>
-        <a-empty v-if="products.length === 0" description="Bu kategoriye ait ürün bulunamadı." />
+        <a-empty v-if="products?.length === 0" description="Bu kategoriye ait ürün bulunamadı." />
 
         <a-row :gutter="16" v-else>
             <a-col :span="8" v-for="product in products" :key="product.id">
-                <a-card hoverable style="width: 240px">
-                    <template #cover>
-                        <img alt="example" src="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ-_JEfZMa8k3LT083NS7k6qd-kroo3EibWeJBv3astq4d71muVcI49RBkWcTVw2D7-QgzgYb5KltllH-ToeZFqLfPl3mVA84W3d06ivpv5JiKCEuBuf-3W2A&usqp=CAE" />
-                    </template>
-                    <a-card-meta :title="product.title">
-                        <template #description>
-                            {{ product.price }}
-                            {{ product.currency }}
-                        </template>
-                    </a-card-meta>
-                    <template #actions>
-                        <a-button type="primary" @click="handleAddChart(product)">Sepet Ekle</a-button>
-                    </template>
-                </a-card>
+                <product-card :product="product" />
             </a-col>
         </a-row>
     </div>
 </template>
 
 <script setup lang="ts">
-import supabaseClient from '@/plugin/supabaseClient';
+import type { IProduct } from '@/models/Product';
+import categoryService from '@/services/categoryService';
+import productService from '@/services/productService';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import ProductCard from '@/components/ProductCard.vue';
 
 const route = useRoute()
-const products = ref()
+const products = ref<IProduct[] | null>()
 const loading = ref(true)
 const category = ref()
 
 const loadProducts = async () => {
     loading.value = true
-    const { data: productsData } = await supabaseClient.from("products").select().eq("category_id", route.params.id)
-    const { data: categoryData } = await supabaseClient.from("categories").select().eq("id", route.params.id).single()
+
+    const categoryId = route.params.id
+
+    const productsData = await productService.getProducts(categoryId)
+    const { data: categoryData } = await categoryService.getCategory(categoryId)
+
     products.value = productsData
     category.value = categoryData
     loading.value = false
@@ -54,19 +48,6 @@ watch(
     () => route.params.id, 
     async () => await loadProducts()
 )
-
-const handleAddChart = async (product: any) => {
-
-    const { data: userData } = await supabaseClient.auth.getUser()
-
-    await supabaseClient.from("carts").insert({
-        amount: 1,
-        product_id: product.id,
-        user_id: userData.user?.id
-    })
-
-    alert("Ürün başarıyla eklendi")
-}
 
 onMounted(async () => {
     await loadProducts()

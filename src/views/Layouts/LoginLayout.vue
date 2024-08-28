@@ -1,8 +1,7 @@
 <template>
   <a-layout class="layout">
-    <a-layout-content style="padding: 0 50px">
-      login layout
-      <div :style="{ background: '#fff', padding: '24px', minHeight: '280px' }">
+    <a-layout-content>
+      <div>
         <router-view />
       </div>
     </a-layout-content>
@@ -11,17 +10,5 @@
 <style scoped>
 .layout {
   min-height: 100vh;
-}
-.site-layout-content {
-  min-height: 280px;
-  padding: 24px;
-  background: #fff;
-}
-.logo {
-  float: left;
-  width: 120px;
-  height: 31px;
-  margin: 16px 24px 16px 0;
-  background: rgba(255, 255, 255, 0.3);
 }
 </style>

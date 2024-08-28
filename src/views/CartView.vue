@@ -35,8 +35,11 @@
 </template>
 
 <script setup lang="ts">
-import supabaseClient from '@/plugin/supabaseClient';
+import cartService from '@/services/cartService';
+import { useAuthStore } from '@/stores/AuthStore';
 import { computed, onMounted, ref } from 'vue';
+
+const authStore = useAuthStore()
 
 const cart = ref()
 
@@ -50,15 +53,6 @@ const columns = [
         key: 'price',
         width: "100px"
     },
-    // {
-    //     title: 'Fiyat',
-    //     dataIndex: ['products', 'price'],
-    //     width: "100px"
-    // },
-    // {
-    //     dataIndex: ['products', 'currency'],
-    //     width: "100px"
-    // },
     {
         title: 'Miktar',
         dataIndex: 'amount',
@@ -75,47 +69,23 @@ const columns = [
     }
 ]
 
-const getUserId = async () => {
-    const { data: userData } = await supabaseClient.auth.getUser()
-    return userData.user?.id
-}
-
 const handleRemove = async (cartItem: any) => {
-    await supabaseClient
-        .from("carts")
-        .delete()
-        .eq("user_id", await getUserId())
-        .eq("id", cartItem.id)
-
+    await cartService.removeCartItem(authStore.userId, cartItem.id)
     await loadData()
 }
 
 const handleChangeAmount = async (amount: any, cartItem: any) => {
-    await supabaseClient
-        .from("carts")
-        .update({
-            amount: amount
-        })
-        .eq("user_id", await getUserId())
-        .eq("id", cartItem.id)
-
+    await cartService.updateAmount(authStore.userId, cartItem.id, amount)
     await loadData()
 }
 
 const loadData = async () => {
-    const { data } = await supabaseClient
-        .from("carts")
-        .select("id, amount, products(id, title, price, currency)")
-        .eq("user_id", await getUserId())
-        .order("id")
+    const { data } = await cartService.getCart(authStore.userId)
     cart.value = data
 }
 
 const cartSum = computed(() => {
-    return cart.value?.reduce((a: number, item: any) => {
-        a += (item.products.price * item.amount)
-        return a
-    }, 0)
+    return cartService.calculateCartItemSum(cart.value)
 })
 
 onMounted(async () => {

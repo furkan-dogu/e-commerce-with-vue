@@ -1,6 +1,6 @@
 import supabaseClient from "@/plugin/supabaseClient"
 export interface IUser {
-    id: number,
+    id: string | undefined,
     displayName: string
 }
 
@@ -30,7 +30,7 @@ class AuthService {
         const user = data.user
 
         return {
-            id: 1,
+            id: user?.id,
             displayName: user?.email!
         }
     }

@@ -37,6 +37,7 @@ const router = createRouter({
       name: 'category',
       component: CategoryView,
       meta: {
+        authRequired: true,
         layout: "MainLayout"
       }
     },
@@ -45,6 +46,7 @@ const router = createRouter({
       name: 'cart',
       component: CartView,
       meta: {
+        authRequired: true,
         layout: "MainLayout"
       }
     },

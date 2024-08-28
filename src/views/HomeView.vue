@@ -1,15 +1,33 @@
 <template>
-  <div class="home">
-    <h1>This is an home page</h1>
+  <a-breadcrumb>
+    <a-breadcrumb-item>Ana Sayfa</a-breadcrumb-item>
+  </a-breadcrumb>
+
+  <a-divider />
+
+  <a-skeleton active v-if="loading" />
+  <div v-else>
+    <a-empty v-if="products.length === 0" description="Ürün bulunamadı." />
+
+    <a-row :gutter="16" v-else>
+      <a-col :span="8" v-for="product in products" :key="product.id">
+        <product-card :product="product" />
+      </a-col>
+    </a-row>
   </div>
 </template>
 
-<style>
-@media (min-width: 1024px) {
-  .home {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-}
-</style>
+<script setup lang="ts">
+import ProductCard from '@/components/ProductCard.vue'
+import productService from '@/services/productService'
+import { onMounted, ref } from 'vue'
+
+const products = ref()
+const loading = ref(true)
+
+onMounted(async () => {
+  const productsData = await productService.getAllProducts()
+  products.value = productsData
+  loading.value = false
+})
+</script>

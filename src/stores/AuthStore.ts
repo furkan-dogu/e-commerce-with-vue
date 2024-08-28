@@ -1,10 +1,11 @@
 import authService from '@/services/authService'
 import { defineStore } from 'pinia'
 
-export const useAuthStore = defineStore('authStore', () => {
+const user = await authService.getUser()
+const isAuth = await authService.isAuth() 
 
-    const user = authService.getUser()
-    const isAuth = authService.isAuth()
+export const useAuthStore = defineStore('authStore', () => {
+    const userId = user?.id
 
     const login = async (userName: string, password: string) => {
         return await authService.login(userName, password)
@@ -14,5 +15,5 @@ export const useAuthStore = defineStore('authStore', () => {
         await authService.logout()
     }
 
-    return { user, isAuth, login, logout }
+    return { user, userId, isAuth, login, logout }
 })
