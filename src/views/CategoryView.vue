@@ -1,5 +1,11 @@
 <template>
-    <h1>Categories</h1>
+    <a-breadcrumb v-if="category">
+        <a-breadcrumb-item>Kategoriler</a-breadcrumb-item>
+        <a-breadcrumb-item>{{ category.title }}</a-breadcrumb-item>
+    </a-breadcrumb>
+
+    <a-divider />
+
     <a-skeleton active v-if="loading" />
     <div v-else>
         <a-empty v-if="products.length === 0" description="Bu kategoriye ait ürün bulunamadı." />
@@ -16,6 +22,9 @@
                             {{ product.currency }}
                         </template>
                     </a-card-meta>
+                    <template #actions>
+                        <a-button type="primary" @click="handleAddChart(product)">Sepet Ekle</a-button>
+                    </template>
                 </a-card>
             </a-col>
         </a-row>
@@ -30,11 +39,14 @@ import { useRoute } from 'vue-router';
 const route = useRoute()
 const products = ref()
 const loading = ref(true)
+const category = ref()
 
 const loadProducts = async () => {
     loading.value = true
-    const { data } = await supabaseClient.from("products").select().eq("category_id", route.params.id)
-    products.value = data
+    const { data: productsData } = await supabaseClient.from("products").select().eq("category_id", route.params.id)
+    const { data: categoryData } = await supabaseClient.from("categories").select().eq("id", route.params.id).single()
+    products.value = productsData
+    category.value = categoryData
     loading.value = false
 }
 
@@ -42,6 +54,19 @@ watch(
     () => route.params.id, 
     async () => await loadProducts()
 )
+
+const handleAddChart = async (product: any) => {
+
+    const { data: userData } = await supabaseClient.auth.getUser()
+
+    await supabaseClient.from("carts").insert({
+        amount: 1,
+        product_id: product.id,
+        user_id: userData.user?.id
+    })
+
+    alert("Ürün başarıyla eklendi")
+}
 
 onMounted(async () => {
     await loadProducts()
