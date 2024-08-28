@@ -1,3 +1,5 @@
+import { useAuthStore } from '@/stores/AuthStore'
+import LoginView from '@/views/LoginView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
@@ -7,17 +9,45 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      meta: {
+        authRequired: true,
+        layout: "MainLayout"
+      }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginView,
+      meta: {
+        layout: "LoginLayout"
+      }
     },
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      component: () => import('../views/AboutView.vue'),
+      meta: {
+        authRequired: true,
+        layout: "MainLayout"
+      }
     }
   ]
+})
+
+//% Private Router gibi
+// router.beforeEach((to, from, next) => {
+//   if (to.name == "about" && to.query.user == "furkan") {
+//     next()
+//   }
+// })
+
+router.beforeEach((to) => {
+  const authStore = useAuthStore()
+
+  if(to.meta.authRequired && !authStore.isAuth) {
+    location.href = "/login"
+  }
 })
 
 export default router
