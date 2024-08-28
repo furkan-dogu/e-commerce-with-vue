@@ -4,18 +4,20 @@
       breakpoint="lg"
       collapsed-width="0"
     >
-      <div class="logo">Catalog</div>
+      <div class="logo">Katalog</div>
       <a-menu theme="dark" mode="inline">
         <a-menu-item :key="category.id" v-for="category in categories">
           <user-outlined />
-          <span class="nav-text">{{ category.title }}</span>
+          <router-link :to="'/category/' + category.id" class="nav-text">{{ category.title }}</router-link>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
       <a-layout-header :style="{ background: '#fff', padding: 0 }" />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
-        <div :style="{ padding: '24px', background: '#fff', minHeight: '360px' }">content</div>
+        <div :style="{ padding: '24px', background: '#fff', minHeight: '360px' }">
+          <router-view />
+        </div>
       </a-layout-content>
       <a-layout-footer style="text-align: center">
         Ant Design ©2018 Created by Ant UED
@@ -44,6 +46,7 @@ onMounted(async () => {
   font-size: 24px;
   padding: 5px;
   border-radius: 5px;
+  text-align: center;
 }
 
 .site-layout-sub-header-background {
