@@ -28,7 +28,7 @@ defineProps<{
 
 const handleAddChart = async (product: any) => {
     await cartService.addCartItem(authStore.userId, product.id)
-    alert("Ürün başarıyla eklendi")
+    alert("Ürün başarıyla eklendi veya mevcut ürünün miktarı artırıldı")
 }
 
 </script>
