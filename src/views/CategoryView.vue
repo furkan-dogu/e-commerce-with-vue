@@ -11,7 +11,13 @@
         <a-empty v-if="products?.length === 0" description="Bu kategoriye ait ürün bulunamadı." />
 
         <a-row :gutter="16" v-else>
-            <a-col :span="8" v-for="product in products" :key="product.id">
+            <a-col
+                v-for="product in products"
+                :key="product.id"
+                :xs="24"  
+                :sm="12"   
+                :xl="8"   
+            >
                 <product-card :product="product" />
             </a-col>
         </a-row>

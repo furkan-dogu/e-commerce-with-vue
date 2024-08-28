@@ -25,7 +25,7 @@ const handleLogin = async () => {
     <a-layout-header style="color: white;">
         <h1>Login</h1>
     </a-layout-header>
-    <a-layout-content style="width: 500px; margin: 3rem auto 1rem;">
+    <a-layout-content style="max-width: 500px; width: 95%; margin: 3rem auto 1rem;">
       <a-form
         name="basic"
         autocomplete="off"
